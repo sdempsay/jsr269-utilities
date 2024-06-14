@@ -63,8 +63,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
-            <source>${pluginversions.javaver}</source>
-            <target>${pluginversions.javaver}</target>
+            <release>${pluginversions.javaver}</release>
+            <compilerArgs>-proc:none</compilerArgs>
           </configuration>
         </plugin>
         <plugin>

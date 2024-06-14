@@ -39,8 +39,7 @@ public class TestProcessor {
             "-cp", "target/classes",
             "-d", "target/test",
             "-proc:only",
-            "-target", "21",
-            "-source", "21");
+            "--release", "21");
 
         StringWriter writer = new StringWriter();
         CompilationTask compilationTask = compiler.getTask(writer, fileManager,
