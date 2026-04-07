@@ -9,12 +9,10 @@ The following checkstyle violations need to be fixed:
 | File | Issue | Description |
 |------|-------|-------------|
 | `Jsr269ProcessorImpl.java:26` | JavadocStyle | Incomplete HTML tag in author tag - missing `>` |
-| `Jsr269ProcessorImpl.java:31` | LineLength | Line exceeds 80 characters (108 chars) |
 | `Jsr269ProcessorImpl.java:58` | TodoComment | Contains `// TODO: A merge here would be nice` |
 | `Jsr269ProcessorImpl.java:47` | TodoComment | Contains `// TODO: Safety check that this is a real processor` |
 | `Jsr269ProcessorImpl.java` (multiple) | DesignForExtension | Class designed for extension but lacks javadoc for methods |
 | `Jsr269ProcessorImpl.java` (multiple) | JavadocVariable | Missing javadoc for class fields |
-| `Jsr269ProcessorImpl.java` (multiple) | LineLength | Several lines exceed 80 characters |
 
 ### Test Improvements
 
@@ -50,8 +48,7 @@ The following checkstyle violations need to be fixed:
 ## Actions
 
 1. Fix incomplete HTML tag in `@author` javadoc
-2. Break long lines to 80 characters
-3. Implement service file merge logic (currently overwrites)
+2. Implement service file merge logic (currently overwrites)
 4. Add safety check for processor classes
 5. Add package-info.java files
 6. Add javadoc to test classes

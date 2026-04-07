@@ -25,27 +25,33 @@ import org.dempsay.support.jsr269.annotation.Jsr269Processor;
  * @since 1.0.0
  * @author Shawn Dempsay {@literal <shawn@dempsay.org>}
  */
-@SupportedAnnotationTypes("org.dempsay.support.jsr269.annotation.Jsr269Processor")
+@SupportedAnnotationTypes(
+    "org.dempsay.support.jsr269.annotation.Jsr269Processor")
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 public class Jsr269ProcessorImpl extends AbstractProcessor {
-    private static final String METADATA_TARGET = "META-INF/services/javax.annotation.processing.Processor";
+    private static final String METADATA_TARGET =
+        "META-INF/services/javax.annotation.processing.Processor";
     private final TreeSet<String> processors = new TreeSet<>();
 
     @Override
-    public boolean process(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv) {
+    public boolean process(final Set<? extends TypeElement> annotations,
+        final RoundEnvironment roundEnv) {
         processServices(annotations, roundEnv);
         return false;
     }
 
-    protected void processServices(final Set<? extends TypeElement> annotations, final RoundEnvironment roundEnv) {
+    protected void processServices(final Set<? extends TypeElement> annotations,
+        final RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
             writeMetadata();
             return;
         }
 
-        for (Element e : roundEnv.getElementsAnnotatedWith(Jsr269Processor.class)) {
+        for (Element e : roundEnv.getElementsAnnotatedWith(
+            Jsr269Processor.class)) {
             // TODO: Safety check that this is a real processor
-            String processorName = String.format("%s.%s",
+            String processorName = String.format(
+                "%s.%s",
                 this.processingEnv.getElementUtils().getPackageOf(e).toString(),
                 e.getSimpleName());
             this.processors.add(processorName);
@@ -57,7 +63,8 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
         // Simple implementation that just overwrites everything if it was there
         // TODO: A merge here would be nice
         if (!processors.isEmpty()) {
-            try (Writer writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "", METADATA_TARGET).openWriter()) {
+            try (Writer writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "",
+                METADATA_TARGET).openWriter()) {
                 Iterator<String> iterator = processors.descendingIterator();
                 while (iterator.hasNext()) {
                     writer.append(iterator.next());
@@ -65,7 +72,8 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
                 }
                 writer.flush();
             } catch (IOException e) {
-                processingEnv.getMessager().printError(String.format("Failed creating file %s", METADATA_TARGET));
+                processingEnv.getMessager().printError(
+                    String.format("Failed creating file %s", METADATA_TARGET));
             }
         }
     }
