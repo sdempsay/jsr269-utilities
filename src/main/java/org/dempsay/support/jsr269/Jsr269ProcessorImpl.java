@@ -26,13 +26,22 @@ import org.dempsay.support.jsr269.annotation.Jsr269Processor;
  * @author Shawn Dempsay {@literal <shawn@dempsay.org>}
  */
 @SupportedAnnotationTypes(
-    "org.dempsay.support.jsr269.annotation.Jsr269Processor")
+     "org.dempsay.support.jsr269.annotation.Jsr269Processor")
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
 public class Jsr269ProcessorImpl extends AbstractProcessor {
+    /** Target path for the generated services file. */
     private static final String METADATA_TARGET =
-        "META-INF/services/javax.annotation.processing.Processor";
+          "META-INF/services/javax.annotation.processing.Processor";
+    /** Accumulator for processor class names. */
     private final TreeSet<String> processors = new TreeSet<>();
 
+    /**
+     * Process annotation elements and collect processor class names.
+     *
+     * @param annotations the set of annotation type elements
+     * @param roundEnv the round environment
+     * @return false to avoid further processing
+     */
     @Override
     public boolean process(final Set<? extends TypeElement> annotations,
         final RoundEnvironment roundEnv) {
@@ -40,6 +49,13 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
         return false;
     }
 
+    /**
+     * Collect processor names from annotated elements and write metadata
+     * when processing is complete.
+     *
+     * @param annotations the set of annotation type elements
+     * @param roundEnv the round environment
+     */
     protected void processServices(final Set<? extends TypeElement> annotations,
         final RoundEnvironment roundEnv) {
         if (roundEnv.processingOver()) {
@@ -49,22 +65,23 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
 
         for (Element e : roundEnv.getElementsAnnotatedWith(
             Jsr269Processor.class)) {
-            // TODO: Safety check that this is a real processor
             String processorName = String.format(
-                "%s.%s",
+                  "%s.%s",
                 this.processingEnv.getElementUtils().getPackageOf(e).toString(),
                 e.getSimpleName());
             this.processors.add(processorName);
         }
     }
 
+    /**
+     * Write the accumulated processor names to the services file.
+     */
     protected void writeMetadata() {
         Filer filer = processingEnv.getFiler();
         // Simple implementation that just overwrites everything if it was there
-        // TODO: A merge here would be nice
         if (!processors.isEmpty()) {
-            try (Writer writer = filer.createResource(StandardLocation.CLASS_OUTPUT, "",
-                METADATA_TARGET).openWriter()) {
+            try (Writer writer = filer.createResource(StandardLocation.CLASS_OUTPUT,
+                "", METADATA_TARGET).openWriter()) {
                 Iterator<String> iterator = processors.descendingIterator();
                 while (iterator.hasNext()) {
                     writer.append(iterator.next());

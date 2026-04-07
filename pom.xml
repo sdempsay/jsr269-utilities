@@ -2,18 +2,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>org.dempsay.maven</groupId>
+    <artifactId>dempsay-parent</artifactId>
+    <version>1.1.0-SNAPSHOT</version>
+  </parent>
+
   <groupId>org.dempsay.support.jsr269</groupId>
   <artifactId>jsr269-utilities</artifactId>
   <version>1.1.0-SNAPSHOT</version>
 
   <name>JSR 269 utillties for Maven</name>
   <description>JSR 269 utillties for Maven</description>
+  <url>https://github.com/sdempsay/jsr269-utilities</url>
   <organization>
     <name>Dempsay.org</name>
     <url>http://www.dempsay.org</url>
   </organization>
-
-  <url>https://github.com/sdempsay/jsr269-utilities</url>
   <licenses>
     <license>
       <name>MIT License</name>
@@ -36,14 +41,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-    <checkstyle.version>8.31</checkstyle.version>
-    <checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
-
+    <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
     <junit-jupiter.version>5.10.0</junit-jupiter.version>
 
-    <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
-    <pluginversions.javaver>21</pluginversions.javaver>
   </properties>
 
   <dependencies>
@@ -61,50 +61,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven-compiler-plugin.version}</version>
-          <configuration>
-            <release>${pluginversions.javaver}</release>
-            <compilerArgs>-proc:none</compilerArgs>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>${checkstyle-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>com.puppycrawl.tools</groupId>
-              <artifactId>checkstyle</artifactId>
-              <version>${checkstyle.version}</version>
-            </dependency>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>validate</id>
-              <phase>validate</phase>
-              <configuration>
-                <encoding>UTF-8</encoding>
-                <consoleOutput>true</consoleOutput>
-                <failsOnError>true</failsOnError>
-                <violationSeverity>warning</violationSeverity>
-                <linkXRef>false</linkXRef>
-              </configuration>
-              <goals>
-                <goal>check</goal>
-                <goal>checkstyle</goal>
-                <goal>checkstyle-aggregate</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>
