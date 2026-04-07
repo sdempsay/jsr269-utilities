@@ -23,7 +23,7 @@ import org.dempsay.support.jsr269.annotation.Jsr269Processor;
  * by adding the needed entries in META-INF.
  *
  * @since 1.0.0
- * @author Shawn Dempsay {@literal <shawn@dempsay.org}
+ * @author Shawn Dempsay {@literal <shawn@dempsay.org>}
  */
 @SupportedAnnotationTypes("org.dempsay.support.jsr269.annotation.Jsr269Processor")
 @SupportedSourceVersion(SourceVersion.RELEASE_21)
