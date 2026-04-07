@@ -1,6 +1,6 @@
 package org.dempsay.support.jsr269;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * TODO: describe
@@ -47,13 +47,14 @@ public class TestProcessor {
             compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
 
         File processorFile = new File(target, "META-INF/services/javax.annotation.processing.Processor");
-        assertTrue("Compilation success", compilationTask.call());
-        assertTrue("We have a service file", processorFile.exists());
+        assertTrue(compilationTask.call(), "Compilation success");
+        assertTrue(processorFile.exists(), "We have a service file");
         // Read the contents of processorFile
         try (BufferedReader reader = new BufferedReader(new FileReader(processorFile))) {
-            assertTrue("Processor contains org.dempsay.support.jsr269.FooProcessor",
+            assertTrue(
                 reader.lines().collect(Collectors.joining(System.lineSeparator()))
-                    .contains("org.dempsay.support.jsr269.FooProcessor"));
+                    .contains("org.dempsay.support.jsr269.FooProcessor"),
+                "Processor contains org.dempsay.support.jsr269.FooProcessor");
         }
     }
 
