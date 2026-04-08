@@ -50,7 +50,6 @@ public class TestProcessor {
                  "-d", "target/test",
                  "--release", "21");
 
-        StringWriter writer = new StringWriter();
         CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
                 compilerOptions, compilerUnits);
 
@@ -93,7 +92,6 @@ public class TestProcessor {
                  "-d", "target/test-merge",
                  "--release", "21");
 
-        StringWriter writer = new StringWriter();
         CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
                 compilerOptions, compilerUnits);
 
@@ -137,7 +135,6 @@ public class TestProcessor {
                  "-d", "target/test-order",
                  "--release", "21");
 
-        StringWriter writer = new StringWriter();
         CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
                 compilerOptions, compilerUnits);
 
