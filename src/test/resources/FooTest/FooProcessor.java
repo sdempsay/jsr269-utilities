@@ -9,10 +9,10 @@ import javax.lang.model.element.TypeElement;
 import org.dempsay.support.jsr269.annotation.Jsr269Processor;
 
 /**
- * TODO: describe
+ * Sample annotation processor used for integration testing of Jsr269ProcessorImpl.
  *
  * @since 1.0.0
- * @author Shawn Dempsay {@literal <shawn@dempsay.org}
+ * @author Shawn Dempsay {@literal <shawn@dempsay.org>}
  */
 @Jsr269Processor
 public class FooProcessor extends AbstractProcessor {
