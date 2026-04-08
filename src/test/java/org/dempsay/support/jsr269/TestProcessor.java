@@ -31,6 +31,40 @@ import org.junit.jupiter.api.Test;
  */
 public class TestProcessor {
     @Test
+    public void testInvalidProcessor() throws Exception {
+        File target = new File("target/test-invalid");
+        if (target.exists()) {
+            deleteRecursive(target);
+        } else {
+            target.mkdirs();
+        }
+
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+        var compilerUnits = fileManager.getJavaFileObjectsFromFiles(
+                List.of(new File("src/test/resources/InvalidTest/InvalidProcessor.java")));
+        var compilerOptions = List.of(
+                 "-proc:only",
+                 "-processor", "org.dempsay.support.jsr269.Jsr269ProcessorImpl",
+                 "-cp", "target/classes",
+                 "-d", "target/test-invalid",
+                 "--release", "21");
+
+        List<Diagnostic<? extends JavaFileObject>> diagnostics = new ArrayList<>();
+        StringWriter writer = new StringWriter();
+        CompilationTask compilationTask = compiler.getTask(writer, fileManager,
+                diagnostics::add,
+                compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
+
+        compilationTask.call();
+
+        boolean hasError = diagnostics.stream()
+            .anyMatch(d -> d.getKind() == Diagnostic.Kind.ERROR
+                && d.getMessage(null).contains("InvalidProcessor"));
+        assertTrue(hasError, "Should report error for invalid processor");
+    }
+
+    @Test
     public void testMetadata() throws Exception {
         File target = new File("target/test");
         if (target.exists()) {
