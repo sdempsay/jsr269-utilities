@@ -1,5 +1,7 @@
 # TODO List
 
+**All tasks completed as of 2026-04-08**
+
 ## High Priority
 
 ### Checkstyle Compliance Issues
@@ -18,16 +20,16 @@ The following checkstyle violations need to be fixed:
 
 | File | Issue | Description | Status |
 |------|-------|-------------|--------|
-| `TestProcessor.java:20` | TodoComment | Missing test class description | **PENDING** |
-| `FooProcessor.java:12` | TodoComment | Missing class description | **PENDING** |
-| `TestProcessor.java:44-46` | CodeQuality | Compiler diagnostics handler prints to `System.out` instead of capturing/testable output | **PENDING** |
+| `TestProcessor.java:20` | TodoComment | Missing test class description | **FIXED** - Already has Javadoc |
+| `FooProcessor.java:12` | TodoComment | Missing class description | **DONE** |
+| `TestProcessor.java:44-46` | CodeQuality | Compiler diagnostics handler prints to `System.out` instead of capturing/testable output | **DONE** - Refactored to capture diagnostics in list |
 
 ## Medium Priority
 
 ### Code Quality
 
-- `Jsr269ProcessorImpl.java:85` - Uses `descendingIterator()` for writing - unclear if intentional; file uses `TreeSet` which maintains alphabetical order, so `ascendingIterator()` would be more appropriate
-- `Jsr269ProcessorImpl.java:92-94` - Error message doesn't include exception details for debugging
+- **DONE** - `Jsr269ProcessorImpl.java:85` - Changed `descendingIterator()` to `iterator()` for alphabetical order
+- **DONE** - `Jsr269ProcessorImpl.java:92-94` - Error message now includes exception details
 
 ### Documentation
 
@@ -38,7 +40,7 @@ The following checkstyle violations need to be fixed:
 ### Dependencies
 
 - **COMPLETED** - `pom.xml` correctly uses JUnit Jupiter 5.10.0 (lines 45-62); no JUnit 4 dependency present
-- `pom.xml:15-16` - Typos in project name: "utillties" should be "utilities" (**PENDING**)
+- **DONE** - `pom.xml:15-16` - Fixed typos "utillties" → "utilities"
 
 ### Build Configuration
 
@@ -50,11 +52,11 @@ The following checkstyle violations need to be fixed:
 |---|--------|------|--------|
 | 1 | Fix incomplete HTML tag in `@author` javadoc | `Jsr269ProcessorImpl.java:26` | **DONE** |
 | 2 | Implement service file merge logic (currently overwrites) | `Jsr269ProcessorImpl.java` | **DONE** |
-| 3 | Add safety check for processor classes | `Jsr269ProcessorImpl.java` | **PENDING** |
+| 3 | Add safety check for processor classes | `Jsr269ProcessorImpl.java` | **DONE** |
 | 4 | Add package-info.java files | Both packages | **DONE** |
-| 5 | Add javadoc to test classes | `TestProcessor.java:20`, `FooProcessor.java:12` | **PENDING** |
+| 5 | Add javadoc to test classes | `TestProcessor.java:20`, `FooProcessor.java:12` | **DONE** |
 | 6 | Fix `descendingIterator()` to `ascendingIterator()` | `Jsr269ProcessorImpl.java:85` | **PASS** - checkstyle:check now reports 0 violations |
 | 7 | Improve error message with exception details | `Jsr269ProcessorImpl.java:92-94` | **DONE** - Error message now includes exception details |
-| 8 | Fix project name typos "utillties" → "utilities" | `pom.xml:15-16` | **PENDING** |
+| 8 | Fix project name typos "utillties" → "utilities" | `pom.xml:15-16` | **DONE** |
 | 9 | Add javadoc for `Jsr269ProcessorImpl` class fields | `Jsr269ProcessorImpl.java:33-36` | **PASS** - checkstyle:check now reports 0 violations |
 | 10 | Add javadoc for protected methods (DesignForExtension) | `Jsr269ProcessorImpl.java:59,79` | **PASS** - checkstyle:check now reports 0 violations |
