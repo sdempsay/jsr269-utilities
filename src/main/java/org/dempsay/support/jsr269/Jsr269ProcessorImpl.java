@@ -1,6 +1,8 @@
 package org.dempsay.support.jsr269;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Set;
@@ -85,11 +87,12 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
      */
     protected void writeMetadata() {
         Filer filer = processingEnv.getFiler();
-        // Simple implementation that just overwrites everything if it was there
-        if (!processors.isEmpty()) {
+        TreeSet<String> allProcessors = new TreeSet<>(processors);
+        if (!allProcessors.isEmpty()) {
+            readExistingProcessors(filer, allProcessors);
             try (Writer writer = filer.createResource(StandardLocation.CLASS_OUTPUT,
                 "", METADATA_TARGET).openWriter()) {
-                Iterator<String> iterator = processors.descendingIterator();
+                Iterator<String> iterator = allProcessors.iterator();
                 while (iterator.hasNext()) {
                     writer.append(iterator.next());
                     writer.append(System.lineSeparator());
@@ -103,12 +106,36 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
     }
 
     /**
+     * Read existing processor entries from the services file and add them
+     * to the given set.
+     *
+     * @param filer the file writer
+     * @param processors the set to add existing processors to
+     */
+    private void readExistingProcessors(final Filer filer,
+            final TreeSet<String> processors) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(filer.getResource(
+                    StandardLocation.CLASS_OUTPUT, "", METADATA_TARGET)
+                    .openInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty()) {
+                    processors.add(line.trim());
+                }
+            }
+        } catch (IOException e) {
+            // File doesn't exist yet, which is fine
+        }
+    }
+
+    /**
      * Check if the given element is a valid annotation processor.
      *
      * @param element the element to check
      * @return true if the element extends AbstractProcessor
      */
-    private boolean isValidProcessor(Element element) {
+    private boolean isValidProcessor(final Element element) {
         TypeElement abstractProcessor = processingEnv.getElementUtils()
             .getTypeElement("javax.annotation.processing.AbstractProcessor");
         if (abstractProcessor == null) {

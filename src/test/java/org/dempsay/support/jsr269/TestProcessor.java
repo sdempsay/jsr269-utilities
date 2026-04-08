@@ -8,11 +8,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.tools.Diagnostic;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 
@@ -48,9 +51,8 @@ public class TestProcessor {
                  "--release", "21");
 
         StringWriter writer = new StringWriter();
-        CompilationTask compilationTask = compiler.getTask(writer, fileManager,
-                diagnostics -> System.err.println(diagnostics.getMessage(null)),
-                compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
+        CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
+                compilerOptions, compilerUnits);
 
         File processorFile = new File(target, "META-INF/services/javax.annotation.processing.Processor");
          // Annotation processing may return false but still generate output
@@ -92,9 +94,8 @@ public class TestProcessor {
                  "--release", "21");
 
         StringWriter writer = new StringWriter();
-        CompilationTask compilationTask = compiler.getTask(writer, fileManager,
-                diagnostics -> System.err.println(diagnostics.getMessage(null)),
-                compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
+        CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
+                compilerOptions, compilerUnits);
 
          // Annotation processing may return false but still generate output
         compilationTask.call();
@@ -137,9 +138,8 @@ public class TestProcessor {
                  "--release", "21");
 
         StringWriter writer = new StringWriter();
-        CompilationTask compilationTask = compiler.getTask(writer, fileManager,
-                diagnostics -> System.err.println(diagnostics.getMessage(null)),
-                compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
+        CompilationTask compilationTask = createCompilationTask(compiler, fileManager,
+                compilerOptions, compilerUnits);
 
          // Annotation processing may return false but still generate output
         compilationTask.call();
@@ -154,14 +154,24 @@ public class TestProcessor {
             assertEquals("org.dempsay.support.jsr269.ZProcessor", lines.get(2),
                      "Third processor should be ZProcessor");
          }
-     }
+}
 
     private void deleteRecursive(File f) {
         if (f.isDirectory()) {
             for (File c : f.listFiles()) {
                 deleteRecursive(c);
-             }
-         }
+            }
+        }
         f.delete();
-     }
+    }
+
+    private CompilationTask createCompilationTask(JavaCompiler compiler,
+            StandardJavaFileManager fileManager, List<String> compilerOptions,
+            Iterable<? extends JavaFileObject> compilerUnits) {
+        StringWriter writer = new StringWriter();
+        List<Diagnostic<? extends JavaFileObject>> diagnostics = new ArrayList<>();
+        return compiler.getTask(writer, fileManager,
+                diagnostics::add,
+                compilerOptions, List.of(Jsr269ProcessorImpl.class.getCanonicalName()), compilerUnits);
+    }
 }
