@@ -65,6 +65,13 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
 
         for (Element e : roundEnv.getElementsAnnotatedWith(
             Jsr269Processor.class)) {
+            if (!isValidProcessor(e)) {
+                processingEnv.getMessager().printError(
+                    String.format("%s is not a valid annotation processor "
+                        + "(does not extend AbstractProcessor)",
+                        e.getSimpleName()), e);
+                continue;
+            }
             String processorName = String.format(
                   "%s.%s",
                 this.processingEnv.getElementUtils().getPackageOf(e).toString(),
@@ -90,8 +97,25 @@ public class Jsr269ProcessorImpl extends AbstractProcessor {
                 writer.flush();
             } catch (IOException e) {
                 processingEnv.getMessager().printError(
-                    String.format("Failed creating file %s", METADATA_TARGET));
+                    String.format("Failed creating file %s: %s", METADATA_TARGET, e));
             }
         }
+    }
+
+    /**
+     * Check if the given element is a valid annotation processor.
+     *
+     * @param element the element to check
+     * @return true if the element extends AbstractProcessor
+     */
+    private boolean isValidProcessor(Element element) {
+        TypeElement abstractProcessor = processingEnv.getElementUtils()
+            .getTypeElement("javax.annotation.processing.AbstractProcessor");
+        if (abstractProcessor == null) {
+            return false;
+        }
+        return processingEnv.getTypeUtils().isAssignable(
+            processingEnv.getTypeUtils().erasure(((TypeElement) element).asType()),
+            processingEnv.getTypeUtils().erasure(abstractProcessor.asType()));
     }
 }
