@@ -33,9 +33,9 @@
       <url>${project.baseUri}</url>
     </site>
     <repository>
-      <id>jsr269-utilities-repo</id>
-      <name>GitHub repo</name>
-      <url>https://github.com/sdempsay/jsr269-utilities</url>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/sdempsay/maven-repository</url>
     </repository>
   </distributionManagement>
 
