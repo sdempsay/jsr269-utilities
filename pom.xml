@@ -10,7 +10,7 @@
 
   <groupId>org.dempsay.support.jsr269</groupId>
   <artifactId>jsr269-utilities</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
   <name>JSR 269 utilities for Maven</name>
   <description>JSR 269 utilities for Maven</description>
