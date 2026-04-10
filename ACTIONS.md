@@ -1,5 +1,11 @@
 # Actions Log
 
+## 2026-04-10
+
+- Added maven-invoker-plugin to pom.xml for integration tests
+- Created src/it/basic integration test with ExampleProcessor
+- Created verify.groovy script to validate service file generation
+
 ## 2026-04-07
 
 - Fixed incomplete HTML tag in `@author` javadoc (missing `>`)
