@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.dempsay.maven</groupId>
     <artifactId>dempsay-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
   </parent>
 
   <groupId>org.dempsay.support.jsr269</groupId>
   <artifactId>jsr269-utilities</artifactId>
-  <version>1.1.0-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
 
   <name>JSR 269 utilities for Maven</name>
   <description>JSR 269 utilities for Maven</description>
@@ -40,7 +40,43 @@
   </distributionManagement>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
   </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <proc>none</proc>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <version>${maven-invoker-plugin.version}</version>
+        <configuration>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <postBuildHookScript>verify</postBuildHookScript>
+          <streamLogsOnFailures>true</streamLogsOnFailures>
+          <updateSnapshots>true</updateSnapshots>
+          <properties>
+            <skipDocker>true</skipDocker>
+            <tidy.skip>true</tidy.skip>
+            <maven.javadoc.skip>true</maven.javadoc.skip>
+          </properties>
+        </configuration>
+        <executions>
+          <execution>
+            <id>integration-test</id>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
